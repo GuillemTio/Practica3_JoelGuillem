@@ -50,7 +50,7 @@ public class CameraController : MonoBehaviour
 
         if (!Input.anyKey && Input.GetAxis("Mouse X") == 0 && Input.GetAxis("Mouse Y") == 0)
         {
-            Debug.Log(m_ResetCamTimer);
+            //Debug.Log(m_ResetCamTimer);
             m_ResetCamTimer += Time.deltaTime;
             if (m_ResetCamTimer > m_TimeToResetCamera)
             {

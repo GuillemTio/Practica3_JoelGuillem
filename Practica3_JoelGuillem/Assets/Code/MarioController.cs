@@ -71,6 +71,11 @@ public class MarioController : MonoBehaviour, IRestartGameElement
     int m_CurrentLifes;
     public int m_MaxLifes = 3;
 
+    [Header("DeathScreen")]
+    public GameObject m_DeathScreen;
+    public GameObject m_RetryButton;
+    public GameObject m_ExitButton;
+
     public enum TPunchHitColliderType
     {
         LEFT_HAND = 0,
@@ -319,15 +324,34 @@ public class MarioController : MonoBehaviour, IRestartGameElement
         //m_Life = 0;
         m_CurrentLifes--;
         m_UI.UpdateLifeText(m_CurrentLifes);
-        if (m_CurrentLifes == 0)
+        if (m_CurrentLifes != 0)
         {
-            //die menu and can only exit game
+            // Tiene más vidas, puedes mostrar la pantalla de muerte y el botón de retry
+            ShowDeathScreen();
+            m_RetryButton.SetActive(true);
+            m_ExitButton.SetActive(true);
         }
         else
-            GameController.GetGameController().RestartGame();
+        {
+            // No tiene más vidas, solo puede salir del juego
+            ShowDeathScreen();
+            m_RetryButton.SetActive(false);
+            m_ExitButton.SetActive(true);
+        }
+        //if (m_CurrentLifes != 0)
+        //{
+        //die menu and can only exit game
+        //ShowDeathScreen();
+        //}
+        //else
+        //{
+        //GameController.GetGameController().RestartGame();
+        //}
     }
     public void RestartGame()
     {
+        Debug.Log("RestartGame() called");
+        HideDeathScreen();
         m_CharacterController.enabled = false;
         if (m_CurrentCheckpoint == null)
         {
@@ -469,5 +493,25 @@ public class MarioController : MonoBehaviour, IRestartGameElement
     void MovePlayerFromWall()
     {
         m_CharacterController.Move(new Vector3(m_JumpHorizontalSpeed * transform.forward.x * Time.deltaTime, 0, m_JumpHorizontalSpeed * transform.forward.z * Time.deltaTime));
+    }
+
+    public void ShowDeathScreen()
+    {
+        m_DeathScreen.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
+    public void HideDeathScreen()
+    {
+        Debug.Log("HideDeathScreen() called");
+        m_DeathScreen.SetActive(false);
+        m_RetryButton.SetActive(false);
+        m_ExitButton.SetActive(false);
+    }
+
+    public void RetryButtonClicked()
+    {
+        GameController.GetGameController().RestartGame();  
     }
 }
