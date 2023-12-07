@@ -3615,14 +3615,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4241143340598648207, guid: ccf3311fa7a8afb4b83266eb9800579d, type: 3}
-      propertyPath: m_TimeToAttack
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4241143340598648207, guid: ccf3311fa7a8afb4b83266eb9800579d, type: 3}
-      propertyPath: m_MinDistanceToAttack
-      value: 1.22
-      objectReference: {fileID: 0}
-    - target: {fileID: 4241143340598648207, guid: ccf3311fa7a8afb4b83266eb9800579d, type: 3}
       propertyPath: m_PatrolPositions.Array.data[0]
       value: 
       objectReference: {fileID: 1501143185}
