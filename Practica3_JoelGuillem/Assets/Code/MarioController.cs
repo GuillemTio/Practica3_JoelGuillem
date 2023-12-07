@@ -14,10 +14,14 @@ public class MarioController : MonoBehaviour, IRestartGameElement
     Vector3 m_StartPosition;
     Quaternion m_StartRotation;
 
+    public ParticleSystem m_RunParticles;
+
     Checkpoint m_CurrentCheckpoint;
 
     public UIMario m_UI;
 
+    float m_specialIdleTimer;
+    public float m_TimeToSpecialIdle;
 
     [Header("DebugInput")]
 
@@ -131,7 +135,7 @@ public class MarioController : MonoBehaviour, IRestartGameElement
 
         }
         m_Animator.SetBool("IsCrouched", m_IsCrouched);
-     
+
         if (!m_IsCrouched)
         {
             Vector3 l_Right = m_Camera.transform.right;
@@ -175,10 +179,15 @@ public class MarioController : MonoBehaviour, IRestartGameElement
                 l_Speed = m_WalkSpeed;
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
+                    if (m_RunParticles.isStopped)
+                    {
+                        m_RunParticles.Play();
+                    }
                     l_AnimationSpeed = 1f;
                     l_Speed = m_RunSpeed;
                 }
             }
+
             l_Movement.Normalize();
             if (l_Speed > 0.0f)
             {
@@ -210,6 +219,19 @@ public class MarioController : MonoBehaviour, IRestartGameElement
             m_Animator.SetBool("OnGround", m_OnGround);
             m_Animator.SetFloat("Speed", l_AnimationSpeed);
 
+            //Special Idle
+            if (!Input.anyKey)
+            {
+                m_specialIdleTimer += Time.deltaTime;
+                if (m_specialIdleTimer > m_TimeToSpecialIdle)
+                {
+                    m_Animator.SetTrigger("SpecialIdle");
+                    m_specialIdleTimer = 0;
+                }
+            }
+            else
+                m_specialIdleTimer = 0;
+
             if (CanPunch() && Input.GetMouseButtonUp(0))
             {
                 if (!MustPunchCombo())
@@ -218,6 +240,11 @@ public class MarioController : MonoBehaviour, IRestartGameElement
                 m_CurrentPunchId++;
                 if (m_CurrentPunchId > 2)
                     m_CurrentPunchId = 0;
+            }
+
+            if ((!(l_AnimationSpeed > 0.3) || (!m_OnGround))&& m_RunParticles.isPlaying)
+            {
+                m_RunParticles.Stop();
             }
         }
 
@@ -267,12 +294,8 @@ public class MarioController : MonoBehaviour, IRestartGameElement
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Item")
-        {
-            //Item l_Item = other.GetComponent<Item>();
-            //if (l_Item.CanPick()) l_Item.Pick();
-        }
-        else if (other.tag == "DeathZone")
+
+        if (other.tag == "DeathZone")
         {
             Kill();
         }
@@ -508,10 +531,11 @@ public class MarioController : MonoBehaviour, IRestartGameElement
         m_DeathScreen.SetActive(false);
         m_RetryButton.SetActive(false);
         m_ExitButton.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void RetryButtonClicked()
     {
-        GameController.GetGameController().RestartGame();  
+        GameController.GetGameController().RestartGame();
     }
 }

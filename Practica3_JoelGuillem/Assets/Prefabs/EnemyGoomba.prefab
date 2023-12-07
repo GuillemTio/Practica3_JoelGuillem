@@ -180,8 +180,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   m_AttackDamage: 1
-  m_TimeToAttack: 2
-  m_MinDistanceToAttack: 1.32
+  m_TimeToAttack: 1.5
+  m_MinDistanceToAttack: 1.22
   m_WalkSpeed: 1.5
   m_RunSpeed: 3.5
 --- !u!195 &6643767590766757076
