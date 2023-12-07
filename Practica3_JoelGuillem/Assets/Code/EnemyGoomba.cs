@@ -170,14 +170,8 @@ public class EnemyGoomba : MonoBehaviour, IRestartGameElement
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("hey listen");
         if (other.tag == "MarioPunch")
             Kill();
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("hey listen");
     }
 
     private void Attack()
