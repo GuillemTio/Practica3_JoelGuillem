@@ -74,6 +74,7 @@ public class MarioController : MonoBehaviour, IRestartGameElement
     int m_MaxHealth = 8;
     int m_CurrentLifes;
     public int m_MaxLifes = 3;
+    public GameObject m_PickParticles;
 
     [Header("DeathScreen")]
     public GameObject m_DeathScreen;
@@ -341,6 +342,8 @@ public class MarioController : MonoBehaviour, IRestartGameElement
         else if (other.tag == "Star")
         {
             AudioManager.instance.PlaySound(m_StarSound);
+            GameObject l_Particles = Instantiate(m_PickParticles, transform.position, transform.rotation);
+            l_Particles.GetComponent<ParticleSystem>().Play();
             UpdateHealth(1);
             other.gameObject.SetActive(false);
         }
@@ -381,14 +384,12 @@ public class MarioController : MonoBehaviour, IRestartGameElement
     {
         if (m_CurrentLifes != 0)
         {
-            // Tiene más vidas, puedes mostrar la pantalla de muerte y el botón de retry
             ShowDeathScreen();
             m_RetryButton.SetActive(true);
             m_ExitButton.SetActive(true);
         }
         else
         {
-            // No tiene más vidas, solo puede salir del juego
             ShowDeathScreen();
             m_RetryButton.SetActive(false);
             m_ExitButton.SetActive(true);
@@ -574,5 +575,11 @@ public class MarioController : MonoBehaviour, IRestartGameElement
     public void RetryButtonClicked()
     {
         GameController.GetGameController().RestartGame();
+    }
+
+    public void ExitButtonClicked()
+    {
+        Debug.Log("Exit button clicked");
+        Application.Quit();
     }
 }

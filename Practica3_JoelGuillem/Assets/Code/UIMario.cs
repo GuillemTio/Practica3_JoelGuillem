@@ -13,7 +13,7 @@ public class UIMario : MonoBehaviour
     bool m_CoinsAnimationStarting;
 
 
-    int m_CoinsDebug = 0;
+    //int m_CoinsDebug = 0;
     [Header("Life")]
     public Image m_LifeBarImage;
     public Animation m_LifeAnimation;

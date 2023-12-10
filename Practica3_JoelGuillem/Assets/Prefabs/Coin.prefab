@@ -60,6 +60,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7b3476a2e03c7248a3538d7de5979be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_PickParticles: {fileID: 1693432787197131062, guid: e1664c8c151bd7a46b6745f62ab1ce2d, type: 3}
 --- !u!111 &32443561
 Animation:
   m_ObjectHideFlags: 0
@@ -69,9 +70,9 @@ Animation:
   m_GameObject: {fileID: 2450465598053489066}
   m_Enabled: 1
   serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: e27b13fcc30de934c9515b5684513929, type: 2}
+  m_Animation: {fileID: 7400000, guid: dc9c89f455179b64698e9c3e75c8819a, type: 2}
   m_Animations:
-  - {fileID: 7400000, guid: e27b13fcc30de934c9515b5684513929, type: 2}
+  - {fileID: 7400000, guid: dc9c89f455179b64698e9c3e75c8819a, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
@@ -125,7 +126,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 0c401d7a13eff2e45bb0aaab5ee5e03d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 218
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 0c401d7a13eff2e45bb0aaab5ee5e03d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
