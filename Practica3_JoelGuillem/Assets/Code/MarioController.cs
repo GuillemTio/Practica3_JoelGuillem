@@ -368,7 +368,6 @@ public class MarioController : MonoBehaviour, IRestartGameElement
     void Kill()
     {
         m_CharacterController.enabled = false;
-        m_Animator.SetTrigger("Die");
         m_Animator.SetBool("IsDead", true);
         AudioManager.instance.PlaySound(m_DieSound);
 
@@ -574,7 +573,6 @@ public class MarioController : MonoBehaviour, IRestartGameElement
 
     public void HideDeathScreen()
     {
-        Debug.Log("HideDeathScreen() called");
         m_DeathScreen.SetActive(false);
         m_RetryButton.SetActive(false);
         m_ExitButton.SetActive(false);
@@ -588,7 +586,6 @@ public class MarioController : MonoBehaviour, IRestartGameElement
 
     public void ExitButtonClicked()
     {
-        Debug.Log("Exit button clicked");
         Application.Quit();
     }
 }
