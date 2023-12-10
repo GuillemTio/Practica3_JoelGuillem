@@ -126,8 +126,6 @@ public class MarioController : MonoBehaviour, IRestartGameElement
         AudioManager.instance.PlayLevelMusic(m_LevelMusic, 0.2f);
     }
 
-
-
     void Update()
     {
 #if UNITY_EDITOR
@@ -149,7 +147,6 @@ public class MarioController : MonoBehaviour, IRestartGameElement
         else
         {
             m_IsCrouched = false;
-
         }
         m_Animator.SetBool("IsCrouched", m_IsCrouched);
 
@@ -301,8 +298,6 @@ public class MarioController : MonoBehaviour, IRestartGameElement
             MovePlayerFromWall();
             UpdateWallJumpTimer();
         }
-
-
     }
 
     private void LateUpdate()
@@ -364,10 +359,12 @@ public class MarioController : MonoBehaviour, IRestartGameElement
         l_DirectionToMario.Normalize();
         return Vector3.Dot(Vector3.up, l_DirectionToMario) > m_MinDotToKillGoomba && m_VerticalSpeed < m_MinVerticalSpeedToKillGoomba;
     }
+
     void JumpOverEnemy()
     {
         m_VerticalSpeed = m_JumpOverEnemySpeed;
     }
+
     void Kill()
     {
         m_CharacterController.enabled = false;
@@ -415,14 +412,17 @@ public class MarioController : MonoBehaviour, IRestartGameElement
         m_CharacterController.enabled = true;
         m_Animator.SetBool("IsDead", false);
     }
+
     bool CanPunch()
     {
         return !m_IsOnPunch;
     }
+
     bool MustPunchCombo()
     {
         return (Time.time - m_LastPunchTime) < m_PunchComboMaxTime;
     }
+
     void Punch(int PunchId)
     {
         m_Animator.SetTrigger("Punch");
@@ -430,6 +430,7 @@ public class MarioController : MonoBehaviour, IRestartGameElement
         m_IsOnPunch = true;
         m_LastPunchTime = Time.time;
     }
+
     public void SetPunchHitColliderActive(TPunchHitColliderType punchHitColliderType, bool Active)
     {
         if (punchHitColliderType == TPunchHitColliderType.LEFT_HAND)
@@ -439,14 +440,17 @@ public class MarioController : MonoBehaviour, IRestartGameElement
         else if (punchHitColliderType == TPunchHitColliderType.RIGHT_FOOT)
             m_RightFootHitCollider.SetActive(Active);
     }
+
     public void SetIsOnPunch(bool IsOnPunch)
     {
         m_IsOnPunch = IsOnPunch;
     }
+
     bool CanGroundJump()
     {
         return m_OnGround;
     }
+
     bool MustJumpCombo()
     {
         return (Time.time - m_LastJumpTime) < m_JumpComboMaxTime;
@@ -482,6 +486,7 @@ public class MarioController : MonoBehaviour, IRestartGameElement
         }
         m_LastJumpTime = Time.time;
     }
+
     bool CanAttachElevator(Collider Elevator)
     {
         if (m_CurrentElevator == null)
@@ -490,16 +495,19 @@ public class MarioController : MonoBehaviour, IRestartGameElement
         }
         return false;
     }
+
     void AttachElevator(Collider Elevator)
     {
         m_CurrentElevator = Elevator;
         transform.SetParent(Elevator.transform);
     }
+
     void DetachElevator()
     {
         m_CurrentElevator = null;
         transform.SetParent(null);
     }
+
     void UpdateElevator()
     {
         if (m_CurrentElevator != null)
@@ -509,6 +517,7 @@ public class MarioController : MonoBehaviour, IRestartGameElement
         }
 
     }
+
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (hit.transform.tag == "Bridge")
@@ -527,7 +536,7 @@ public class MarioController : MonoBehaviour, IRestartGameElement
         if (healthPoints < 0)
         {
             m_Animator.SetTrigger("Hit");
-            AudioManager.instance.PlaySound(m_TakeDamageSound); //SONIDOOO
+            AudioManager.instance.PlaySound(m_TakeDamageSound);
         }
         m_CurrentHealth += healthPoints;
         m_CurrentHealth = Math.Clamp(m_CurrentHealth, 0, m_MaxHealth);

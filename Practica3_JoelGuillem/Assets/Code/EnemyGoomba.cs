@@ -19,7 +19,6 @@ public class EnemyGoomba : MonoBehaviour, IRestartGameElement
     public float m_NearPlayerRadius;
     public List<Transform> m_PatrolPositions;
     int m_CurrentPatrolPositionId = 0;
-    //public GameObject m_ImpactParticles;
     Animator m_Animator;
 
     Vector3 m_StartPosition;

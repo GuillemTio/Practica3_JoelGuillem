@@ -12,8 +12,6 @@ public class UIMario : MonoBehaviour
     public float m_ShowCoinsTime = 2f;
     bool m_CoinsAnimationStarting;
 
-
-    //int m_CoinsDebug = 0;
     [Header("Life")]
     public Image m_LifeBarImage;
     public Animation m_LifeAnimation;
