@@ -150,7 +150,7 @@ public class MarioController : MonoBehaviour, IRestartGameElement
         }
         m_Animator.SetBool("IsCrouched", m_IsCrouched);
 
-        if (!m_IsCrouched)
+        if (!m_IsCrouched && m_CharacterController.enabled)
         {
             Vector3 l_Right = m_Camera.transform.right;
             Vector3 l_Forward = m_Camera.transform.forward;
