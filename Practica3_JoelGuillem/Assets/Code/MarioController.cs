@@ -80,6 +80,19 @@ public class MarioController : MonoBehaviour, IRestartGameElement
     public GameObject m_RetryButton;
     public GameObject m_ExitButton;
 
+    [Header("Sounds")]
+    public AudioClip m_DieSound;
+    public AudioClip m_JumpSound;
+    public AudioClip m_DoubleJumpSound;
+    public AudioClip m_TripleJumpSound;
+    public AudioClip m_LongJumpSound;
+    public AudioClip m_CoinSound;
+    public AudioClip m_StarSound;
+    public AudioClip m_StartLevelSound;
+    public AudioClip m_LevelMusic;
+    public AudioClip m_KillGoombaSound;
+    public AudioClip m_TakeDamageSound;
+
     public enum TPunchHitColliderType
     {
         LEFT_HAND = 0,
@@ -107,6 +120,9 @@ public class MarioController : MonoBehaviour, IRestartGameElement
         m_CurrentHealth = m_MaxHealth;
         m_CurrentLifes = m_MaxLifes;
         m_UI.UpdateLifeText(m_CurrentLifes);
+
+        AudioManager.instance.PlaySound(m_StartLevelSound);
+        AudioManager.instance.PlayLevelMusic(m_LevelMusic, 0.2f);
     }
 
 
@@ -284,6 +300,8 @@ public class MarioController : MonoBehaviour, IRestartGameElement
             MovePlayerFromWall();
             UpdateWallJumpTimer();
         }
+
+
     }
 
     private void LateUpdate()
@@ -309,15 +327,20 @@ public class MarioController : MonoBehaviour, IRestartGameElement
             if (CanKillGoomba(other))
             {
                 other.transform.parent.GetComponent<EnemyGoomba>().Kill();
+                AudioManager.instance.PlaySound(m_KillGoombaSound);
                 JumpOverEnemy();
             }
         }
         else if (other.tag == "Checkpoint")
             m_CurrentCheckpoint = other.GetComponent<Checkpoint>();
         else if (other.tag == "Coin")
+        {
             other.GetComponent<Coin>().Pick();
+            AudioManager.instance.PlaySound(m_CoinSound);
+        }
         else if (other.tag == "Star")
         {
+            AudioManager.instance.PlaySound(m_StarSound);
             UpdateHealth(1);
             other.gameObject.SetActive(false);
         }
@@ -344,9 +367,18 @@ public class MarioController : MonoBehaviour, IRestartGameElement
     }
     void Kill()
     {
-        //m_Life = 0;
+        m_CharacterController.enabled = false;
+        m_Animator.SetTrigger("Die");
+        m_Animator.SetBool("IsDead", true);
+        AudioManager.instance.PlaySound(m_DieSound);
+
         m_CurrentLifes--;
         m_UI.UpdateLifeText(m_CurrentLifes);
+        Invoke("ShowDeathScreenDelayed", 2.0f);
+    }
+
+    void ShowDeathScreenDelayed()
+    {
         if (m_CurrentLifes != 0)
         {
             // Tiene más vidas, puedes mostrar la pantalla de muerte y el botón de retry
@@ -361,19 +393,10 @@ public class MarioController : MonoBehaviour, IRestartGameElement
             m_RetryButton.SetActive(false);
             m_ExitButton.SetActive(true);
         }
-        //if (m_CurrentLifes != 0)
-        //{
-        //die menu and can only exit game
-        //ShowDeathScreen();
-        //}
-        //else
-        //{
-        //GameController.GetGameController().RestartGame();
-        //}
     }
+
     public void RestartGame()
     {
-        Debug.Log("RestartGame() called");
         HideDeathScreen();
         m_CharacterController.enabled = false;
         if (m_CurrentCheckpoint == null)
@@ -389,6 +412,7 @@ public class MarioController : MonoBehaviour, IRestartGameElement
         }
         m_CurrentHealth = m_MaxHealth;
         m_CharacterController.enabled = true;
+        m_Animator.SetBool("IsDead", false);
     }
     bool CanPunch()
     {
@@ -436,13 +460,25 @@ public class MarioController : MonoBehaviour, IRestartGameElement
 
         m_Animator.SetInteger("JumpType", JumpId);
         if (JumpId == 0)
+        {
             m_VerticalSpeed = m_JumpSpeed;
+            AudioManager.instance.PlaySound(m_JumpSound);
+        }
         else if (JumpId == 1)
+        {
             m_VerticalSpeed = m_DoubleJumpSpeed;
+            AudioManager.instance.PlaySound(m_DoubleJumpSound);
+        }
         else if (JumpId == 2)
+        {
             m_VerticalSpeed = m_TripleJumpSpeed;
+            AudioManager.instance.PlaySound(m_TripleJumpSound);
+        }
         else if (JumpId == 3)
+        {
             m_VerticalSpeed = m_LongJumpSpeed;
+            AudioManager.instance.PlaySound(m_LongJumpSound);
+        }
         m_LastJumpTime = Time.time;
     }
     bool CanAttachElevator(Collider Elevator)
@@ -482,7 +518,7 @@ public class MarioController : MonoBehaviour, IRestartGameElement
 
     public void Step(AnimationEvent animationEvent)
     {
-        // AudioClip l_AudioClip = (AudioClip) animationEvent.objectReferenceParameter;
+        AudioClip l_AudioClip = (AudioClip) animationEvent.objectReferenceParameter;
     }
 
     public void UpdateHealth(int healthPoints)
@@ -490,6 +526,7 @@ public class MarioController : MonoBehaviour, IRestartGameElement
         if (healthPoints < 0)
         {
             m_Animator.SetTrigger("Hit");
+            AudioManager.instance.PlaySound(m_TakeDamageSound); //SONIDOOO
         }
         m_CurrentHealth += healthPoints;
         m_CurrentHealth = Math.Clamp(m_CurrentHealth, 0, m_MaxHealth);

@@ -34,6 +34,8 @@ public class EnemyGoomba : MonoBehaviour, IRestartGameElement
     public float m_WalkSpeed;
     public float m_RunSpeed;
 
+    public GameObject m_KillParticles;
+
 
     private void Awake()
     {
@@ -192,6 +194,9 @@ public class EnemyGoomba : MonoBehaviour, IRestartGameElement
 
     public void Kill()
     {
+        
+        GameObject l_Particles = Instantiate(m_KillParticles, transform.position, transform.rotation);
+        l_Particles.GetComponent<ParticleSystem>().Play();
         transform.parent.gameObject.SetActive(false);
     }
 }
